@@ -24,6 +24,7 @@ async function getSuggestions({ image, promptText, contextText }) {
     },
     body: JSON.stringify({
       model,
+      max_tokens: 500, // plenty for 3 short suggestions — avoids hitting credit limits
       response_format: { type: 'json_object' },
       messages: [
         { role: 'system', content: contextText },
