@@ -1,0 +1,89 @@
+:root {
+  --bg: #FBF2EF;
+  --surface: #FFFFFF;
+  --ink: #2A1F26;
+  --accent: #C2185B;
+  --accent-soft: #F3D9E4;
+  --muted: #8B7680;
+  --border: #EBD9DD;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Work Sans', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 32px 16px 64px;
+}
+.card { width: 100%; max-width: 440px; }
+h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 2.1rem;
+  line-height: 1.15;
+  margin: 0 0 6px;
+}
+.sub { color: var(--muted); font-size: 0.95rem; margin: 0 0 32px; max-width: 34ch; }
+section { margin-bottom: 28px; }
+label { display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 8px; }
+
+.drop {
+  border: 1.5px dashed var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+.drop:hover { border-color: var(--accent); }
+.drop img { max-width: 100%; max-height: 220px; border-radius: 8px; display: block; margin: 0 auto; }
+.drop .placeholder { color: var(--muted); font-size: 0.9rem; }
+.drop .placeholder b { color: var(--ink); }
+input[type="file"] { display: none; }
+
+button.primary {
+  width: 100%;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 14px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+button.primary:disabled { opacity: 0.55; cursor: not-allowed; }
+button.primary:not(:disabled):hover { opacity: 0.92; }
+
+.suggestion-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 12px;
+}
+.suggestion-card p {
+  margin: 0 0 12px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.copy-btn {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: none;
+  border-radius: 8px;
+  padding: 9px 14px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.status { font-size: 0.88rem; color: var(--muted); margin-top: 10px; min-height: 1.2em; }
+.status.error { color: var(--accent); }

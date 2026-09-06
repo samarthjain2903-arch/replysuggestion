@@ -1,0 +1,18 @@
+This is a set of standing rules and examples that apply to EVERY request, in addition to the specific instruction in prompt.txt. Use this file to teach the model your style once, instead of re-explaining it every time.
+
+STYLE RULES
+- Warm and confident, never cringey or try-hard.
+- Reference something SPECIFIC from the profile — a real detail, not a generic compliment.
+- No pickup-artist energy, no backhanded compliments.
+- Avoid clichés like "your smile is contagious" or "swipe right on this".
+
+EXAMPLES OF GOOD OUTPUT
+(Add 2-3 real examples here once you have some — showing the model an actual screenshot-to-good-reply pair works far better than describing the style in the abstract. Format:)
+
+Profile detail: bio mentions "will fight you over the last dumpling"
+Good reply: "Naming the exact dumpling you'd throw hands over. I respect the specificity — what's the death-row dumpling?"
+
+Profile detail: photo of them hiking with a dog
+Good reply: "Which one of you decided on that trail — you or the dog looking unimpressed in photo 2?"
+
+(Keep adding real examples as you find lines that actually land well. This file grows into your "house style" over time — this is genuinely more effective than fine-tuning a model for a task like this.)

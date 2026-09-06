@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What should I say?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="card">
+  <h1>What should I say?</h1>
+  <p class="sub">Drop in a profile screenshot, get a few opening lines worth sending.</p>
+
+  <section>
+    <label>Profile screenshot</label>
+    <div class="drop" id="dropZone">
+      <div class="placeholder" id="placeholder"><b>Tap to choose</b> a screenshot</div>
+      <img id="preview" style="display:none;">
+    </div>
+    <input type="file" id="fileInput" accept="image/*">
+  </section>
+
+  <section>
+    <button class="primary" id="goBtn" disabled>Get opening lines</button>
+    <p class="status" id="status"></p>
+  </section>
+
+  <section id="resultSection" style="display:none;">
+    <label>Suggestions</label>
+    <div id="resultList"></div>
+  </section>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
