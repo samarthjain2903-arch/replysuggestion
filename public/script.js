@@ -1,29 +1,45 @@
 const dropZone = document.getElementById('dropZone');
 const fileInput = document.getElementById('fileInput');
-const preview = document.getElementById('preview');
+const thumbGrid = document.getElementById('thumbGrid');
 const placeholder = document.getElementById('placeholder');
 const goBtn = document.getElementById('goBtn');
 const status = document.getElementById('status');
 const resultSection = document.getElementById('resultSection');
 const resultList = document.getElementById('resultList');
+const modelUsed = document.getElementById('modelUsed');
 
-let base64Image = null;
+let base64Images = []; // one base64 string per selected screenshot
 
 dropZone.addEventListener('click', () => fileInput.click());
 
 fileInput.addEventListener('change', () => {
-  const file = fileInput.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const result = e.target.result; // data:image/png;base64,....
-    base64Image = result.split(',')[1];
-    preview.src = result;
-    preview.style.display = 'block';
-    placeholder.style.display = 'none';
-    goBtn.disabled = false;
-  };
-  reader.readAsDataURL(file);
+  const files = Array.from(fileInput.files);
+  if (!files.length) return;
+
+  base64Images = [];
+  thumbGrid.innerHTML = '';
+  placeholder.style.display = 'none';
+  thumbGrid.style.display = 'grid';
+
+  let loaded = 0;
+  files.forEach((file) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const result = e.target.result; // data:image/png;base64,....
+      base64Images.push(result.split(',')[1]);
+
+      const img = document.createElement('img');
+      img.src = result;
+      img.className = 'thumb';
+      thumbGrid.appendChild(img);
+
+      loaded++;
+      if (loaded === files.length) {
+        goBtn.disabled = false;
+      }
+    };
+    reader.readAsDataURL(file);
+  });
 });
 
 goBtn.addEventListener('click', async () => {
@@ -32,12 +48,13 @@ goBtn.addEventListener('click', async () => {
   status.classList.remove('error');
   resultSection.style.display = 'none';
   resultList.innerHTML = '';
+  modelUsed.textContent = '';
 
   try {
     const resp = await fetch('/api/suggest', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image: base64Image })
+      body: JSON.stringify({ images: base64Images })
     });
     const data = await resp.json();
 
@@ -68,6 +85,10 @@ goBtn.addEventListener('click', async () => {
       card.appendChild(copyBtn);
       resultList.appendChild(card);
     });
+
+    if (data.usedModel) {
+      modelUsed.textContent = `Powered by ${data.usedProvider}: ${data.usedModel}`;
+    }
 
     resultSection.style.display = 'block';
     status.textContent = '';
