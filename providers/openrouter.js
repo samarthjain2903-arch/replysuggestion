@@ -37,7 +37,15 @@ async function getSuggestions({ images, promptText, contextText }) {
   const data = await resp.json();
 
   if (!resp.ok) {
-    throw new Error(data?.error?.message || 'OpenRouter API error');
+    // OpenRouter often wraps the REAL upstream error (from Anthropic/Google/etc.)
+    // inside error.metadata.raw — surface that instead of the generic message.
+    const detail =
+      data?.error?.metadata?.raw ||
+      data?.error?.metadata?.reason ||
+      data?.error?.message ||
+      JSON.stringify(data?.error) ||
+      'OpenRouter API error';
+    throw new Error(typeof detail === 'string' ? detail : JSON.stringify(detail));
   }
 
   const raw = data?.choices?.[0]?.message?.content;
