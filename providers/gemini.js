@@ -5,7 +5,7 @@ async function getSuggestions({ images, promptText, contextText }) {
   if (!apiKey) throw new Error('Missing GEMINI_API_KEY in .env');
 
   const imageParts = images.map(img => ({
-    inline_data: { mime_type: 'image/png', data: img }
+    inline_data: { mime_type: img.mimeType, data: img.data }
   }));
 
   const resp = await fetch(

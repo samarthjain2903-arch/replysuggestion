@@ -8,7 +8,7 @@ async function getSuggestions({ images, promptText, contextText }) {
 
   const imageContentParts = images.map(img => ({
     type: 'image_url',
-    image_url: { url: `data:image/png;base64,${img}` }
+    image_url: { url: `data:${img.mimeType};base64,${img.data}` }
   }));
 
   const resp = await fetch('https://openrouter.ai/api/v1/chat/completions', {
@@ -37,8 +37,6 @@ async function getSuggestions({ images, promptText, contextText }) {
   const data = await resp.json();
 
   if (!resp.ok) {
-    // OpenRouter often wraps the REAL upstream error (from Anthropic/Google/etc.)
-    // inside error.metadata.raw — surface that instead of the generic message.
     const detail =
       data?.error?.metadata?.raw ||
       data?.error?.metadata?.reason ||
