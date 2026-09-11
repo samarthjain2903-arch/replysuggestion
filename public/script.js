@@ -8,7 +8,7 @@ const resultSection = document.getElementById('resultSection');
 const resultList = document.getElementById('resultList');
 const modelUsed = document.getElementById('modelUsed');
 
-let base64Images = []; // one base64 string per selected screenshot
+let base64Images = [];
 
 dropZone.addEventListener('click', () => fileInput.click());
 
@@ -25,7 +25,7 @@ fileInput.addEventListener('change', () => {
   files.forEach((file) => {
     const reader = new FileReader();
     reader.onload = (e) => {
-      const result = e.target.result; // data:image/png;base64,....
+      const result = e.target.result;
       base64Images.push(result.split(',')[1]);
 
       const img = document.createElement('img');
@@ -48,7 +48,7 @@ goBtn.addEventListener('click', async () => {
   status.classList.remove('error');
   resultSection.style.display = 'none';
   resultList.innerHTML = '';
-  modelUsed.textContent = '';
+  modelUsed.innerHTML = '';
 
   try {
     const resp = await fetch('/api/suggest', {
@@ -86,9 +86,14 @@ goBtn.addEventListener('click', async () => {
       resultList.appendChild(card);
     });
 
+    let infoHtml = '';
     if (data.usedModel) {
-      modelUsed.textContent = `Powered by ${data.usedProvider}: ${data.usedModel}`;
+      infoHtml += `Powered by ${data.usedProvider}: ${data.usedModel}`;
     }
+    if (data.fallbackNote) {
+      infoHtml += `<br><span style="color:#C2185B;">Fell back after: ${data.fallbackNote}</span>`;
+    }
+    modelUsed.innerHTML = infoHtml;
 
     resultSection.style.display = 'block';
     status.textContent = '';
