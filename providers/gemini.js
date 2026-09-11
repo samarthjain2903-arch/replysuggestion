@@ -27,10 +27,10 @@ async function getSuggestions({ images, promptText, contextText }) {
           ]
         }],
         generationConfig: {
+          temperature: 0.95,
           responseMimeType: 'application/json',
           responseSchema: {
             type: 'ARRAY',
-            temperature: 1.1,
             items: { type: 'STRING' },
             minItems: 3,
             maxItems: 3

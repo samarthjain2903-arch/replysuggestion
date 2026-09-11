@@ -4,7 +4,7 @@ async function getSuggestions({ images, promptText, contextText }) {
 
   if (!apiKey) throw new Error('Missing OPENROUTER_API_KEY in .env');
 
-  const instructionWithFormat = `${promptText}\n\nRespond with ONLY a JSON object in this exact shape, nothing else: {"suggestions": ["line 1", "line 2", "line 3"]}`;
+  const instructionWithFormat = `${promptText}\n\nRespond with ONLY a JSON object in this exact shape, nothing else — no markdown, no code fences, no explanation: {"suggestions": ["line 1", "line 2", "line 3"]}`;
 
   const imageContentParts = images.map(img => ({
     type: 'image_url',
@@ -20,7 +20,7 @@ async function getSuggestions({ images, promptText, contextText }) {
     body: JSON.stringify({
       model,
       max_tokens: 500,
-      temperature: 1.1,
+      temperature: 0.95,
       response_format: { type: 'json_object' },
       messages: [
         { role: 'system', content: contextText },
@@ -47,8 +47,12 @@ async function getSuggestions({ images, promptText, contextText }) {
     throw new Error(typeof detail === 'string' ? detail : JSON.stringify(detail));
   }
 
-  const raw = data?.choices?.[0]?.message?.content;
+  let raw = data?.choices?.[0]?.message?.content;
   if (!raw) throw new Error('No suggestions came back from OpenRouter');
+
+  // Defensive: some models wrap JSON in ```json ... ``` even when told not to.
+  // Strip any markdown code fencing before parsing.
+  raw = raw.trim().replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
 
   const parsed = JSON.parse(raw);
   return { suggestions: parsed.suggestions, model };
