@@ -20,6 +20,7 @@ async function getSuggestions({ images, promptText, contextText }) {
     body: JSON.stringify({
       model,
       max_tokens: 500,
+      temperature: 1.1,
       response_format: { type: 'json_object' },
       messages: [
         { role: 'system', content: contextText },
