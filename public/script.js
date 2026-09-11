@@ -8,7 +8,7 @@ const resultSection = document.getElementById('resultSection');
 const resultList = document.getElementById('resultList');
 const modelUsed = document.getElementById('modelUsed');
 
-let base64Images = [];
+let imageData = []; // [{ data: base64string, mimeType: 'image/jpeg' }, ...]
 
 dropZone.addEventListener('click', () => fileInput.click());
 
@@ -16,7 +16,7 @@ fileInput.addEventListener('change', () => {
   const files = Array.from(fileInput.files);
   if (!files.length) return;
 
-  base64Images = [];
+  imageData = [];
   thumbGrid.innerHTML = '';
   placeholder.style.display = 'none';
   thumbGrid.style.display = 'grid';
@@ -25,8 +25,11 @@ fileInput.addEventListener('change', () => {
   files.forEach((file) => {
     const reader = new FileReader();
     reader.onload = (e) => {
-      const result = e.target.result;
-      base64Images.push(result.split(',')[1]);
+      const result = e.target.result; // data:image/jpeg;base64,....
+      imageData.push({
+        data: result.split(',')[1],
+        mimeType: file.type || 'image/png' // real type from the actual file
+      });
 
       const img = document.createElement('img');
       img.src = result;
@@ -54,7 +57,7 @@ goBtn.addEventListener('click', async () => {
     const resp = await fetch('/api/suggest', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ images: base64Images })
+      body: JSON.stringify({ images: imageData })
     });
     const data = await resp.json();
 
